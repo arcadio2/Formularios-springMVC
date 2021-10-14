@@ -1,14 +1,27 @@
 package com.bolsaideas.springboot.form.app.models.domain;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class Usuario {
+	
+	//@Pattern(regexp = "[0-9]{4}[-][\\d]{3}[-][A-Z]{1}")
+	private String identificador; 
 
-	@NotEmpty
+	//@NotEmpty(message="EL nombre no puede ser vacío")
+	private String nombre; 
+	@NotBlank
+	private String apellido; 
+	@NotBlank
+	@Size(min = 3, max = 8)
 	private String username;
 	@NotEmpty 
 	private String password;
 	@NotEmpty
+	@Email
 	private String email;
 
 	public String getUsername() {
@@ -34,5 +47,28 @@ public class Usuario {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public String getNombre() {
+		return nombre;
+	}
 
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+
+	public String getIdentificador() {
+		return identificador;
+	}
+
+	public void setIdentificador(String identificador) {
+		this.identificador = identificador;
+	}
 }
