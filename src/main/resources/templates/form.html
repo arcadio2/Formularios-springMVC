@@ -8,6 +8,31 @@
 	<h3 th:text="${titulo}"></h3>
 	<form th:action="@{/form}" th:object="${usuario}" method="POST">
 		<div>
+			<label for="habilitar">Habilitar</label>
+			<div >
+			
+				<input type="checkbox" th:field="*{habilitar}" id="habilitar" ><!-- *{pais} ya que mapeamos el objeto al form, entonces este estara a pais -->
+				
+			</div>
+		</div>
+		<div th:if="${#fields.hasErrors('habilitar')}" th:errors="*{habilitar}"></div>
+		
+		<div>
+			<label>Genero</label>
+			<div >
+			
+				<input type="radio" th:field="*{genero}" id="genero1" value="Hombre">
+				<label  for="genero1">Onvre</label>
+			</div>
+			<div >
+			
+				<input type="radio" th:field="*{genero}" id="genero2" value="Mujer">
+				<label  for="genero2">Mujer</label>
+			</div>
+		</div>
+		<div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+		
+		<div>
 			<label for="identificador">Identificador</label>
 			<div>
 				<input type="text"  id="identificador" th:field="*{identificador}">
@@ -15,6 +40,26 @@
 		</div>
 		<div th:if="${#fields.hasErrors('identificador')}" th:errors="*{identificador}"></div>
 		
+		<div>
+			<label for="pais">País</label>
+			<div>
+				<select id="pais" th:field="*{pais}"><!-- *{pais} ya que mapeamos el objeto al form, entonces este estara a pais -->
+					<option value="">--Seleccionar País--</option>
+					<option th:each="pais: ${listaPaises}" th:text="${pais.nombre}" th:value="${pais.id}"></option><!-- Convierte map a set -->
+				</select>
+			</div>
+		</div>
+		<div th:if="${#fields.hasErrors('pais')}" th:errors="*{pais}"></div>
+		
+		<div>
+			<label >Roles</label>
+			<div th:each="rol: ${listaRoles}">
+			
+				<input type="checkbox" th:field="*{roles}" th:value="${rol.id}"><!-- *{pais} ya que mapeamos el objeto al form, entonces este estara a pais -->
+				<label th:for="${#ids.prev('roles')}" th:text="${rol.nombre}"></label>
+			</div>
+		</div>
+		<div th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"></div>
 		
 		<div>
 			<label for="nombre">Nombre</label>
@@ -44,6 +89,21 @@
 			</div>
 		</div>
 		<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+		
+		<div>
+			<label for="cuenta">Cuenta</label>
+			<div>
+				<input type="number"  id="cuenta" th:field="*{cuenta}">
+			</div>
+		</div>
+		<div th:if="${#fields.hasErrors('cuenta')}" th:errors="*{cuenta}"></div>
+		<div>
+			<label for="fechanacimiento">Fecha</label>
+			<div>
+				<input type="date"  id="fechanacimiento" th:field="*{fechanacimiento}" placeholder="yyyy-MM-dd">
+			</div>
+		</div>
+		<div th:if="${#fields.hasErrors('fechanacimiento')}" th:errors="*{fechanacimiento}"></div>
 		<div>
 			<label for="email">email</label>
 			<div>
