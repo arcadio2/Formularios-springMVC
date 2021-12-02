@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -82,6 +83,14 @@ public class FormController {
 		usuario.setNombre("arca"); 
 		usuario.setHabilitar(true); 
 		usuario.setIdentificador("1234-123-L");
+		usuario.setValorSecreto("Secretoso"); 
+		usuario.setPais(new Pais(1,"ES","España"));
+		usuario.setGenero("Hombre");
+		usuario.setUsername("Arca");
+		usuario.setCuenta(100);
+
+		usuario.setEmail("arcadiolg2@gmail.com");
+		usuario.setRoles(Arrays.asList(new Rol(1,"Administrador","ROLE_ADMIN"), new Rol(2,"Usuario","ROLE_USUARIO") ));
 		model.addAttribute("titulo", "FORMULARIO"); 
 		
 		model.addAttribute("usuario", usuario); 
@@ -137,9 +146,19 @@ public class FormController {
 		return roles; 
 	}
 	
+	@ModelAttribute("genero")
+	public List<String> listaGeneros(){
+		List<String> generos = new ArrayList();
+		generos.add("Hombre"); 
+		generos.add("Mujer");
+	
+		
+		return generos; 
+	}
+	
 	@PostMapping("/form")
 	/*@ModelAttribute("user")*/
-	public String procesar(@Valid Usuario usuario, BindingResult result, Model model, SessionStatus status) {  /*Si el objeto tiene los mismos atributos que se reciben, se crea automaticamentw*/
+	public String procesar(@Valid Usuario usuario, BindingResult result,Model model) {  /*Si el objeto tiene los mismos atributos que se reciben, se crea automaticamentw*/
 
 		//System.out.println(result.getFieldValue("pais"));
 		/*@RequestParam String username,
@@ -151,7 +170,7 @@ public class FormController {
 		usuario.setEmail(email); 
 		usuario.setPassword(password); */
 		//  validator.validate(usuario, result);
-		model.addAttribute("titulo", "Resultado del formulario"); 
+		
 		if(result.hasErrors()) {
 			/*Map<String, String> errores = new HashMap<>();
 			result.getFieldErrors().forEach(err ->{
@@ -159,14 +178,27 @@ public class FormController {
 			});   
 			model.addAttribute("error",errores); */
 			//System.out.println(result.getFieldErrors().get(0).getField());
-			
+			model.addAttribute("titulo", "Resultado del formulario");
 			return "form"; 
 		}
 		
-		model.addAttribute("usuario", usuario); 
-		status.setComplete();
-		return "resultado"; 
+		
+		
+		return "redirect:/ver"; 
 	}
 	
+	@GetMapping("/ver")
+	public String ver(@SessionAttribute(name="usuario", required=false) Usuario usuario, Model model, SessionStatus status) {
+		if(usuario !=null) {
+			model.addAttribute("usuario", usuario); 
+
+			status.setComplete();//elimina usuario de la sesion
+			return "resultado"; 
+		}else {
+	
+			return "redirect:/form"; 
+		}
+		
+	}
 	
 }
